@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@android:color/transparent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:rotation="0"
+    android:rotationX="0"
+    android:rotationY="0">
+
+
+    <TextView
+        android:id="@+id/recycleraddbakiyeOnay"
+        android:layout_width="271dp"
+        android:layout_height="31dp"
+        android:gravity="center"
+        android:text="@string/bak_ye_onayi_beklen_yor"
+        android:textColor="@color/black"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/recyclerUserEmail"
+        android:layout_width="298dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="deneme@gmail.com"
+        android:textColor="@color/black"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="64dp" />
+
+    <TextView
+        android:id="@+id/recycleraddbakiyeText"
+        android:layout_width="179dp"
+        android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="100TL"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <CheckBox
+        android:id="@+id/BakiyeIslemCheckBox"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:button="@drawable/check_out"
+
+        android:buttonTint="#323232"
+        android:gravity="center"
+        android:text="İŞLEM YAPMAK İÇİN İŞARETLEYİNİZ" />
+
+
+</LinearLayout>

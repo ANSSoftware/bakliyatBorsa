@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".bilgiGiris">
+
+
+    <Button
+        android:id="@+id/urun_ekle_buton"
+        android:onClick="urunEkleOnClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="37dp"
+        android:layout_marginBottom="44dp"
+        android:text="Ürün Ekle"
+        app:layout_constraintBottom_toTopOf="@+id/bakiye_yukle_ptext"
+        app:layout_constraintEnd_toEndOf="@+id/urun_adeti_ptext"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <Button
+        android:id="@+id/bakiye_yukle_buton"
+        android:onClick="bakiyeYukleOnClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="33dp"
+        android:layout_marginBottom="131dp"
+        android:text="Bakiye Yükle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/bakiye_yukle_ptext"
+        app:layout_constraintTop_toBottomOf="@+id/bakiye_yukle_ptext" />
+
+    <Spinner
+        android:id="@+id/urun_ekle_sp"
+        android:layout_width="333dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/urun_adeti_ptext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="24dp"
+        android:ems="10"
+        android:hint="Ürün Adedi"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/textView3"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/urun_ekle_sp" />
+
+    <EditText
+        android:id="@+id/bakiye_yukle_ptext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="87dp"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/bakiye_yukle_buton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/urun_ekle_buton" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="27dp"
+        android:text="KG"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/urun_ekle_buton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/urun_adeti_ptext"
+        app:layout_constraintTop_toBottomOf="@+id/urun_ekle_sp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "619343384039",
+    "project_id": "yazilimyapimivize",
+    "storage_bucket": "yazilimyapimivize.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619343384039:android:a1900f665de52cc8448142",
+        "android_client_info": {
+          "package_name": "com.ans.borsa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619343384039-hgemmaocpk751v7puebgeiiq10leifko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3_33beTWRetn5FeAZ43-f9m65ZkWk2TE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619343384039-hgemmaocpk751v7puebgeiiq10leifko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
