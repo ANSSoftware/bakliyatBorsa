@@ -55,7 +55,6 @@ class bilgiGiris : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-
     }
 
     fun urunListCekFB(){
@@ -73,29 +72,28 @@ class bilgiGiris : AppCompatActivity() {
                     }
                 }
             }
-
         }
-
     }
+
     fun urunEkleOnClick(view: View){
         val urunMiktariText=urun_adeti_ptext.text.toString()
         if (urunMiktariText!="") {
             if (secilenUrun != "LÜTFEN BİR ÜRÜN SEÇİNİZ") {
                 val urunMiktari = urunMiktariText.toDouble()
-
                 if (urunMiktari != 0.0) {
                     val postMap = hashMapOf<String, Any>()
+                    val uuid= UUID.randomUUID()
                     val userEmail = auth.currentUser!!.email.toString()
                     postMap.put("UserEmail", userEmail)
-                    postMap.put("UrunMiktari", urunMiktari)
-                    postMap.put("Urun", secilenUrun)
-                    postMap.put("UrunOnayi", 0)
-
-                    db.collection("KullaniciUrunleri").add(postMap).addOnCompleteListener { task ->
-
-
+                    postMap.put("addUrunMiktari", urunMiktari)
+                    postMap.put("addUrun", secilenUrun)
+                    postMap.put("addUrunOnay", "HENÜZ İŞLEM YAPILMADI")
+                    postMap.put("addUrunID","$uuid")
+                    db.collection("KullaniciEklenenUrunler").add(postMap).addOnCompleteListener { task ->
                     }.addOnFailureListener { exception ->
                         Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                    }.addOnCompleteListener{
+                        Toast.makeText(applicationContext,"ÜRÜNÜNÜZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
@@ -120,12 +118,11 @@ class bilgiGiris : AppCompatActivity() {
                     postMap.put("addBakiye", addBakiye)
                     postMap.put("addBakiyeOnay", "HENÜZ İŞLEM YAPILMADI")
                     postMap.put("addBakiyeID","$uuid")
-
-                    db.collection("Paralar").add(postMap).addOnCompleteListener { task ->
-
-
+                    db.collection("KullaniciEklenenBakiye").add(postMap).addOnCompleteListener { task ->
                     }.addOnFailureListener { exception ->
                         Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                    }.addOnCompleteListener{
+                        Toast.makeText(applicationContext,"BAKİYENİZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
@@ -134,7 +131,6 @@ class bilgiGiris : AppCompatActivity() {
                 Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
 

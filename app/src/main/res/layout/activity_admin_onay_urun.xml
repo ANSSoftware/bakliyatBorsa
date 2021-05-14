@@ -9,7 +9,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/urunlerRV"
         android:layout_width="415dp"
         android:layout_height="339dp"
         android:background="@drawable/duyuru_background"
@@ -20,67 +20,39 @@
         app:layout_constraintVertical_bias="0.415" />
 
     <Button
-        android:id="@+id/kabul_buton"
+        android:id="@+id/kabul_buton_urun"
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
+        android:layout_marginBottom="140dp"
         android:background="@drawable/buttonarkaplan"
         android:enabled="true"
-        android:onClick="kabulButonClick"
+        android:onClick="kabulButonClickUrun"
         android:text="KABUL"
         android:textColor="@color/textcolor"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.783"
+        app:layout_constraintHorizontal_bias="0.759"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <Button
-        android:id="@+id/red_buton"
+        android:id="@+id/red_buton_urun"
         android:layout_width="120dp"
         android:layout_height="50dp"
         android:background="@drawable/buttonarkaplan"
         android:enabled="true"
-        android:onClick="redButonClick"
+        android:onClick="redButonClickUrun"
         android:text="RED"
         android:textColor="@color/textcolor"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/kabul_buton"
-        app:layout_constraintEnd_toStartOf="@+id/kabul_buton"
-        app:layout_constraintHorizontal_bias="0.582"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/kabul_buton"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:fontFamily="@font/goodtimingbd"
-        android:text="BAKİYELER"
-        android:textColor="@color/sari"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/uorbSwitch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/uorbSwitch"
-        app:layout_constraintTop_toTopOf="@+id/uorbSwitch"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Switch
-        android:id="@+id/uorbSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:fontFamily="@font/goodtimingbd"
-        android:scrollbarSize="100dp"
-        android:text="ÜRÜNLER  "
-        android:textColor="@color/sari"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/kabul_buton_urun"
+        app:layout_constraintHorizontal_bias="0.544"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.098" />
+        app:layout_constraintTop_toTopOf="@+id/kabul_buton_urun"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView6"
@@ -96,8 +68,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/kabul_buton"
-        app:layout_constraintVertical_bias="0.494" />
+        app:layout_constraintTop_toBottomOf="@+id/kabul_buton_urun"
+        app:layout_constraintVertical_bias="0.741" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="370dp"
+        android:layout_height="78dp"
+        android:fontFamily="@font/goodtimingbd"
+        android:gravity="center"
+        android:text="URUN"
+        android:textColor="@color/sari"
+        android:textSize="50sp"
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="42dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

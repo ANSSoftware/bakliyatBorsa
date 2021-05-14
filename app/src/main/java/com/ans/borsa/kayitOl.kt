@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_kayit_ol.*
-import android.app.ProgressDialog
 
 class kayitOl : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
@@ -17,27 +16,22 @@ class kayitOl : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_kayit_ol)
 
-
-
         auth =  FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+
         val currentUser = auth.currentUser
         if(currentUser != null){
             val intent = Intent(applicationContext, AnaMenu::class.java)
             startActivity(intent)
             finish()
         }
-
     }
 
     fun kayitOlClick(view : View) {
-
         var email = emailKayitText.text.toString()
         var sifre = sifreKayitText.text.toString()
 
-
         auth.createUserWithEmailAndPassword(email, sifre).addOnCompleteListener { task ->
-
             if (task.isSuccessful) {
                 val intent = Intent(applicationContext, AnaMenu::class.java)
                 startActivity(intent)
@@ -64,25 +58,43 @@ class kayitOl : AppCompatActivity() {
                     ).show()
                 }
             }
-
      }
 
     fun kayitFireBaseAktarma(name: String,surname: String,kullaniciadi: String,sifre: String
                              ,tckimlik: String,telefonno: String,email: String,adres: String,userid: String){
-        val postMap = hashMapOf<String, Any>()
-        val bakiye=0
-        postMap.put("Adi", name)
-        postMap.put("Soyadi", surname)
-        postMap.put("KullaniciAdi", kullaniciadi)
-        postMap.put("Sifre", sifre)
-        postMap.put("TcKimlikNo", tckimlik)
-        postMap.put("TelefonNo", telefonno)
-        postMap.put("Email", email)
-        postMap.put("Adres", adres)
-        postMap.put("UserID", userid)
-        postMap.put("bakiye",bakiye)
+        val postMapKullanici = hashMapOf<String, Any>()
+        postMapKullanici.put("Adi", name)
+        postMapKullanici.put("Soyadi", surname)
+        postMapKullanici.put("KullaniciAdi", kullaniciadi)
+        postMapKullanici.put("Sifre", sifre)
+        postMapKullanici.put("TcKimlikNo", tckimlik)
+        postMapKullanici.put("TelefonNo", telefonno)
+        postMapKullanici.put("Email", email)
+        postMapKullanici.put("Adres", adres)
+        postMapKullanici.put("UserID", userid)
+        db.collection("Kullanicilar").add(postMapKullanici).addOnCompleteListener { task ->
 
-        db.collection("Kullanicilar").add(postMap).addOnCompleteListener { task ->
+            if (task.isComplete && task.isSuccessful) {
+                finish()
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+        }
+        val postMapBakiye = hashMapOf<String, Any>()
+        postMapBakiye.put("bakiye", 0)
+        postMapBakiye.put("Email", email)
+        db.collection("Bakiyeler").add(postMapBakiye).addOnCompleteListener { task ->
+
+            if (task.isComplete && task.isSuccessful) {
+                finish()
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+        }
+        val postMapKullaniciTipi = hashMapOf<String, Any>()
+        postMapKullaniciTipi.put("Admin", false)
+        postMapKullaniciTipi.put("Email", email)
+        db.collection("KullaniciTipi").add(postMapKullaniciTipi).addOnCompleteListener { task ->
 
             if (task.isComplete && task.isSuccessful) {
                 finish()
@@ -91,8 +103,8 @@ class kayitOl : AppCompatActivity() {
             Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
         }
 
-
     }
+
 }
 
 

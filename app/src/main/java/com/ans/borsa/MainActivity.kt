@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val intent = Intent(applicationContext, adminOnay::class.java)
+            val intent = Intent(applicationContext,AdminOnayUrun::class.java)
             startActivity(intent)
             finish()
         }
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     "Hoşgeldin: ${auth.currentUser?.email}",
                     Toast.LENGTH_LONG
                 ).show()
-                val intent = Intent(applicationContext, bilgiGiris::class.java)
+                val intent = Intent(applicationContext, AnaMenu::class.java)
                 startActivity(intent)
                 finish()
             }

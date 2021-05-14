@@ -9,8 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Borsa">
-        <activity android:name=".bilgiGiris"></activity>
-        <activity android:name=".adminOnay" />
+        <activity android:name=".AdminOnayUrun"></activity>
+        <activity android:name=".bilgiGiris" />
+        <activity android:name=".adminOnayBakiye" />
         <activity android:name=".AnaMenu" />
         <activity android:name=".kayitOl" />
         <activity android:name=".MainActivity">
