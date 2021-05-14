@@ -12,10 +12,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_bilgi_giris.*
+import java.util.*
 
 class bilgiGiris : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private lateinit var db : FirebaseFirestore
+
 
     lateinit var urun_ekle_sp : Spinner
     var urunler = arrayListOf("LÜTFEN BİR ÜRÜN SEÇİNİZ")
@@ -110,13 +112,14 @@ class bilgiGiris : AppCompatActivity() {
             val addBakiyeText=bakiye_yukle_ptext.text.toString()
             if (addBakiyeText!="") {
                 val addBakiye = addBakiyeText.toDouble()
-
+                val uuid= UUID.randomUUID()
                 if (addBakiye != 0.0) {
                     val postMap = hashMapOf<String, Any>()
                     val userEmail = auth.currentUser!!.email.toString()
                     postMap.put("UserEmail", userEmail)
                     postMap.put("addBakiye", addBakiye)
-                    postMap.put("addBakiyeOnay", 0)
+                    postMap.put("addBakiyeOnay", "HENÜZ İŞLEM YAPILMADI")
+                    postMap.put("addBakiyeID","$uuid")
 
                     db.collection("Paralar").add(postMap).addOnCompleteListener { task ->
 
