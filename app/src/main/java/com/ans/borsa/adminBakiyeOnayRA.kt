@@ -36,7 +36,6 @@ class adminBakiyeOnayRA(private val addbakiyeTextArray: ArrayList<String>,
 
         init{
             recycleraddbakiyeText = view.findViewById(R.id.recycleraddbakiyeText)
-           recycleraddbakiyeOnay = view.findViewById(R.id.recycleraddbakiyeOnay)
             recyclerUserEmail = view.findViewById(R.id.recyclerUserEmail)
         }
 

@@ -83,7 +83,7 @@ class adminOnay : AppCompatActivity() {
                             if(addBakiyeOnay=="HENÜZ İŞLEM YAPILMADI" && i==0){
                                 i++
                                 if(deger==false){
-                                    db.collection("Paralar").document(document.id).update("addBakiyeOnay","PARA BAKİYEYE AKTARILDI")
+                                    db.collection("Paralar").document(document.id).update("addBakiyeOnay","PARA AKTARIMI REDDEDİLDİ")
                                 }else{
                                     db.collection("Paralar").document(document.id).update("addBakiyeOnay","PARA BAKİYEYE AKTARILDI")
                                 }

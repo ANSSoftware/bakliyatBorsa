@@ -10,25 +10,20 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="405dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
-        android:layout_marginBottom="179dp"
+        android:layout_width="415dp"
+        android:layout_height="339dp"
         android:background="@drawable/duyuru_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch2"
-        app:layout_constraintVertical_bias="0.602" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.415" />
 
     <Button
         android:id="@+id/kabul_buton"
-        android:layout_width="0dp"
-        android:layout_height="81dp"
-        android:layout_marginTop="620dp"
-        android:layout_marginEnd="40dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/buttonarkaplan"
         android:enabled="true"
         android:onClick="kabulButonClick"
@@ -36,60 +31,73 @@
         android:textColor="@color/textcolor"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/red_buton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.783"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
     <Button
         android:id="@+id/red_buton"
-        android:layout_width="141dp"
-        android:layout_height="74dp"
-        android:layout_marginStart="40dp"
-        android:onClick="redButonClick"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="42dp"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:background="@drawable/buttonarkaplan"
         android:enabled="true"
+        android:onClick="redButonClick"
         android:text="RED"
         android:textColor="@color/textcolor"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/kabul_buton"
         app:layout_constraintEnd_toStartOf="@+id/kabul_buton"
+        app:layout_constraintHorizontal_bias="0.582"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-        app:layout_constraintVertical_bias="0.441" />
-
-    <Switch
-        android:id="@+id/uorbSwitch"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="81dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="108dp"
-        android:fontFamily="@font/goodtimingbd"
-        android:scrollbarSize="100dp"
-        android:text="ÜRÜNLER"
-        android:textColor="@color/sari"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toStartOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/kabul_buton"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="72dp"
+        android:layout_marginEnd="60dp"
         android:fontFamily="@font/goodtimingbd"
         android:text="BAKİYELER"
         android:textColor="@color/sari"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/uorbSwitch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/switch2"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/uorbSwitch"
+        app:layout_constraintTop_toTopOf="@+id/uorbSwitch"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Switch
+        android:id="@+id/uorbSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:fontFamily="@font/goodtimingbd"
+        android:scrollbarSize="100dp"
+        android:text="ÜRÜNLER  "
+        android:textColor="@color/sari"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.098" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="370dp"
+        android:layout_height="78dp"
+        android:fontFamily="@font/goodtimingbd"
+        android:gravity="center"
+        android:text="YAPILAN İŞLEMLER YUKARIDAN
+        AŞAĞIYA DOĞRU SIRAYLA YAPILMAKTADIR."
+        android:textColor="@color/sari"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/kabul_buton"
+        app:layout_constraintVertical_bias="0.494" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,26 +6,16 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:gravity="center"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:rotation="0"
     android:rotationX="0"
     android:rotationY="0">
 
 
     <TextView
-        android:id="@+id/recycleraddbakiyeOnay"
-        android:layout_width="271dp"
-        android:layout_height="31dp"
-        android:gravity="center"
-        android:text="@string/bak_ye_onayi_beklen_yor"
-        android:textColor="@color/black"
-        tools:layout_editor_absoluteX="136dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <TextView
         android:id="@+id/recyclerUserEmail"
-        android:layout_width="298dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="deneme@gmail.com"
         android:textColor="@color/black"
@@ -34,7 +24,7 @@
 
     <TextView
         android:id="@+id/recycleraddbakiyeText"
-        android:layout_width="179dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
         android:gravity="center"
