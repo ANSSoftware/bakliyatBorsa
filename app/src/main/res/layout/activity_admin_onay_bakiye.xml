@@ -24,7 +24,6 @@
         android:id="@+id/kabul_buton_bakiye"
         android:layout_width="120dp"
         android:layout_height="50dp"
-        android:layout_marginTop="28dp"
         android:layout_marginBottom="140dp"
         android:background="@drawable/buttonarkaplan"
         android:enabled="true"
@@ -32,11 +31,12 @@
         android:text="KABUL"
         android:textColor="@color/textcolor"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/red_buton_bakiye"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.759"
+        app:layout_constraintHorizontal_bias="0.766"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toTopOf="@+id/red_buton_bakiye"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/red_buton_bakiye"
@@ -50,10 +50,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/kabul_buton_bakiye"
-        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintHorizontal_bias="0.574"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/kabul_buton_bakiye"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/bakiyeRV"
+        app:layout_constraintVertical_bias="0.217" />
 
     <TextView
         android:id="@+id/textView6"
@@ -81,8 +81,9 @@
         android:text="BAKİYE"
         android:textColor="@color/sari"
         android:textSize="50sp"
-        tools:layout_editor_absoluteX="25dp"
-        tools:layout_editor_absoluteY="42dp" />
+        app:layout_constraintBottom_toTopOf="@+id/bakiyeRV"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="25dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,13 +6,15 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:gravity="center"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:rotation="0"
+    android:rotationX="0"
+    android:rotationY="0">
 
     <TextView
-        android:id="@+id/recyclerUserEmailUrun"
-        android:layout_width="162dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/recyclerUserEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="deneme@gmail.com"
         android:textColor="@color/black"
@@ -20,45 +22,23 @@
         tools:layout_editor_absoluteY="64dp" />
 
     <TextView
-        android:id="@+id/recycleraddurunText"
-        android:layout_width="wrap_content"
+        android:id="@+id/recyclerurunMiktar"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="Nohut"
+        android:text="100KG"
         android:textColor="@color/black"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
-
     <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="@color/black"
-        android:text=":" />
-
-    <TextView
-        android:id="@+id/recycleraddurunMiktar"
+        android:id="@+id/recyclerurunTutar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:autoSizeTextType="uniform"
         android:gravity="center"
-        android:text="20 adet"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <TextView
-        android:id="@+id/recycleradduruntutar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:autoSizeTextType="uniform"
-        android:gravity="center"
-        android:text="300.0TL"
+        android:text="2.0TL"
         android:textColor="@color/black"
         android:textSize="20sp"
         tools:layout_editor_absoluteX="0dp"

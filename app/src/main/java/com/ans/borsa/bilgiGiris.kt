@@ -1,8 +1,11 @@
 package com.ans.borsa
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -15,13 +18,13 @@ import kotlinx.android.synthetic.main.activity_bilgi_giris.*
 import java.util.*
 
 class bilgiGiris : AppCompatActivity() {
-    private lateinit var auth : FirebaseAuth
-    private lateinit var db : FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
 
-    lateinit var urun_ekle_sp : Spinner
+    lateinit var urun_ekle_sp: Spinner
     var urunler = arrayListOf("LÜTFEN BİR ÜRÜN SEÇİNİZ")
-    var secilenUrun=""
+    var secilenUrun = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bilgi_giris)
@@ -33,10 +36,10 @@ class bilgiGiris : AppCompatActivity() {
 
     }
 
-    fun urun_ekle_spfun(){
+    fun urun_ekle_spfun() {
         urun_ekle_sp = findViewById(R.id.urun_ekle_sp) as Spinner
-        urun_ekle_sp.adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1,urunler)
-        urun_ekle_sp.onItemSelectedListener = object  : AdapterView.OnItemClickListener,
+        urun_ekle_sp.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, urunler)
+        urun_ekle_sp.onItemSelectedListener = object : AdapterView.OnItemClickListener,
                 AdapterView.OnItemSelectedListener {
             override fun onItemClick(
                     parent: AdapterView<*>?,
@@ -45,27 +48,30 @@ class bilgiGiris : AppCompatActivity() {
                     id: Long
             ) {
             }
+
             override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
-            ) { secilenUrun=urunler[position]
+            ) {
+                secilenUrun = urunler[position]
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
     }
 
-    fun urunListCekFB(){
+    fun urunListCekFB() {
         db.collection("Urunler").orderBy("Urun", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
             if (exception != null) {
-                Toast.makeText(applicationContext,exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-            }else{
-                if(snapshot != null){
-                    if(!snapshot.isEmpty){
+                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+            } else {
+                if (snapshot != null) {
+                    if (!snapshot.isEmpty) {
                         val documents = snapshot.documents
-                        for(document in documents){
+                        for (document in documents) {
                             val urun = document.get("Urun") as String
                             urunler.add(urun)
                         }
@@ -75,25 +81,28 @@ class bilgiGiris : AppCompatActivity() {
         }
     }
 
-    fun urunEkleOnClick(view: View){
-        val urunMiktariText=urun_adeti_ptext.text.toString()
-        if (urunMiktariText!="") {
+    fun urunEkleOnClick(view: View) {
+        val urunTutariText = urun_tutari_text.text.toString()
+        val urunMiktariText = urun_adeti_ptext.text.toString()
+        if (urunMiktariText != "" && urunTutariText != "") {
             if (secilenUrun != "LÜTFEN BİR ÜRÜN SEÇİNİZ") {
                 val urunMiktari = urunMiktariText.toDouble()
-                if (urunMiktari != 0.0) {
+                val urunTutari = urunTutariText.toDouble()
+                if (urunMiktari != 0.0 && urunTutari != 0.0) {
                     val postMap = hashMapOf<String, Any>()
-                    val uuid= UUID.randomUUID()
+                    val uuid = UUID.randomUUID()
                     val userEmail = auth.currentUser!!.email.toString()
                     postMap.put("UserEmail", userEmail)
                     postMap.put("addUrunMiktari", urunMiktari)
                     postMap.put("addUrun", secilenUrun)
                     postMap.put("addUrunOnay", "HENÜZ İŞLEM YAPILMADI")
-                    postMap.put("addUrunID","$uuid")
-                    db.collection("KullaniciEklenenUrunler").add(postMap).addOnCompleteListener { task ->
+                    postMap.put("addUrunID", "$uuid")
+                    postMap.put("addUrunTutari", urunTutari)
+                    db.collection("KullaniciUrunlerEklenen").add(postMap).addOnCompleteListener { task ->
                     }.addOnFailureListener { exception ->
                         Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-                    }.addOnCompleteListener{
-                        Toast.makeText(applicationContext,"ÜRÜNÜNÜZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
+                    }.addOnCompleteListener {
+                        Toast.makeText(applicationContext, "ÜRÜNÜNÜZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
@@ -101,37 +110,59 @@ class bilgiGiris : AppCompatActivity() {
             } else {
                 Toast.makeText(applicationContext, "LÜTFEN BİR ÜRÜN SEÇİNİZ", Toast.LENGTH_SHORT).show()
             }
-        }else {
+        } else {
             Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun bakiyeYukleOnClick(view: View){
-            val addBakiyeText=bakiye_yukle_ptext.text.toString()
-            if (addBakiyeText!="") {
-                val addBakiye = addBakiyeText.toDouble()
-                val uuid= UUID.randomUUID()
-                if (addBakiye != 0.0) {
-                    val postMap = hashMapOf<String, Any>()
-                    val userEmail = auth.currentUser!!.email.toString()
-                    postMap.put("UserEmail", userEmail)
-                    postMap.put("addBakiye", addBakiye)
-                    postMap.put("addBakiyeOnay", "HENÜZ İŞLEM YAPILMADI")
-                    postMap.put("addBakiyeID","$uuid")
-                    db.collection("KullaniciEklenenBakiye").add(postMap).addOnCompleteListener { task ->
-                    }.addOnFailureListener { exception ->
-                        Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-                    }.addOnCompleteListener{
-                        Toast.makeText(applicationContext,"BAKİYENİZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
+    fun bakiyeYukleOnClick(view: View) {
+        val addBakiyeText = bakiye_yukle_ptext.text.toString()
+        if (addBakiyeText != "") {
+            val addBakiye = addBakiyeText.toDouble()
+            val uuid = UUID.randomUUID()
+            if (addBakiye != 0.0) {
+                val postMap = hashMapOf<String, Any>()
+                val userEmail = auth.currentUser!!.email.toString()
+                postMap.put("UserEmail", userEmail)
+                postMap.put("addBakiye", addBakiye)
+                postMap.put("addBakiyeOnay", "HENÜZ İŞLEM YAPILMADI")
+                postMap.put("addBakiyeID", "$uuid")
+                db.collection("KullaniciBakiyeEklenen").add(postMap).addOnCompleteListener { task ->
+                }.addOnFailureListener { exception ->
+                    Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+                }.addOnCompleteListener {
+                    Toast.makeText(applicationContext, "BAKİYENİZ ADMİN ONAYINA GÖNDERİLMİŞTİR", Toast.LENGTH_SHORT).show()
                 }
-            }else {
+            } else {
                 Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Toast.makeText(applicationContext, "LÜTFEN GEÇERLİ BİR DEĞER GİRİNİZ", Toast.LENGTH_SHORT).show()
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.options_menu_kullanici, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == R.id.logout) {
+            auth.signOut()
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else if (item.itemId == R.id.anasayfa) {
+            val intent = Intent(applicationContext, AnaMenu::class.java)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+}
 
 
 

@@ -14,15 +14,15 @@ import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_admin_onay_urun.*
 
 class AdminOnayUrun : AppCompatActivity() {
-    private lateinit var auth : FirebaseAuth
-    private lateinit var db : FirebaseFirestore
-    var addurunFromFB : ArrayList<String> = ArrayList()
-    var addurunOnayFromFB : ArrayList<String> = ArrayList()
-    var addurunSayiFromFB : ArrayList<String> = ArrayList()
-    var UserEmailFromUFB : ArrayList<String> = ArrayList()
-    var adapterurun : adminUrunOnayRA? = null
-    var y=0
-    var z=0
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
+    var addurunFromFB: ArrayList<String> = ArrayList()
+    var addurunOnayFromFB: ArrayList<String> = ArrayList()
+    var addurunSayiFromFB: ArrayList<String> = ArrayList()
+    var UserEmailFromUFB: ArrayList<String> = ArrayList()
+    var addurunTutarFromFB: ArrayList<String> = ArrayList()
+    var adapterurun: adminUrunOnayRA? = null
+    var z = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_onay_urun)
@@ -32,8 +32,8 @@ class AdminOnayUrun : AppCompatActivity() {
         getDataFromFSUrun()
         var layoutManagerUrun = LinearLayoutManager(this)
         urunlerRV.layoutManager = layoutManagerUrun
-        adapterurun = adminUrunOnayRA(addurunFromFB,addurunOnayFromFB,addurunSayiFromFB,UserEmailFromUFB)
-        urunlerRV.adapter = adapterurun
+        adapterurun = adminUrunOnayRA(addurunFromFB, addurunOnayFromFB, addurunSayiFromFB, UserEmailFromUFB, addurunTutarFromFB)
+        urunlerRV.adapter = adapterurun // Receyceler view a arraydaki verilerimiz aktarılıyor.
     }
 
     fun redButonClickUrun(view: View) {
@@ -44,29 +44,33 @@ class AdminOnayUrun : AppCompatActivity() {
         butonClickControlUrun(true)
     }
 
-    fun getDataFromFSUrun(){
-        db.collection("KullaniciEklenenUrunler").orderBy("addUrunID", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
+    fun getDataFromFSUrun() { //eklenen ürünleri admin onayına sunuyoruz
+        db.collection("KullaniciUrunlerEklenen").orderBy("addUrunID", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
             if (exception != null) {
-                Toast.makeText(applicationContext,exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
-            }else{
-                if(snapshot != null){
-                    if(!snapshot.isEmpty){
+                Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+            } else {
+                if (snapshot != null) {
+                    if (!snapshot.isEmpty) {
                         addurunFromFB.clear()
                         addurunOnayFromFB.clear()
                         UserEmailFromUFB.clear()
                         addurunSayiFromFB.clear()
+                        addurunTutarFromFB.clear()
                         var documents = snapshot.documents
-                        for(document in documents){
+                        for (document in documents) {
                             val addUrun = document.get("addUrun") as String
-                            val addUrunOnay = document.get("addUrunOnay")  as String
+                            val addUrunOnay = document.get("addUrunOnay") as String
                             val userEmail = document.get("UserEmail") as String
                             val addUrunSayi = document.get("addUrunMiktari") as Number
                             val addUrunSayiText = addUrunSayi.toString() + "KG"
-                            if(addUrunOnay=="HENÜZ İŞLEM YAPILMADI"){
+                            val addUrunTutar = document.get("addUrunTutari") as Number
+                            val addUrunTutarText = addUrunTutar.toString() + "TL"
+                            if (addUrunOnay == "HENÜZ İŞLEM YAPILMADI") {
                                 UserEmailFromUFB.add(userEmail)
                                 addurunOnayFromFB.add(addUrunOnay)
                                 addurunFromFB.add(addUrun)
                                 addurunSayiFromFB.add(addUrunSayiText)
+                                addurunTutarFromFB.add(addUrunTutarText)
                             }
                             adapterurun!!.notifyDataSetChanged()
                         }
@@ -76,14 +80,14 @@ class AdminOnayUrun : AppCompatActivity() {
         }
     }
 
-    fun butonClickControlUrun(deger: Boolean ){
-        z=0
-        db.collection("KullaniciEklenenUrunler").orderBy("addUrunID", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
+    fun butonClickControlUrun(deger: Boolean) { // basılan buton kontrol ediliyor
+        z = 0
+        db.collection("KullaniciUrunlerEklenen").orderBy("addUrunID", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
             if (exception != null) {
                 Toast.makeText(
-                    applicationContext,
-                    exception.localizedMessage.toString(),
-                    Toast.LENGTH_LONG
+                        applicationContext,
+                        exception.localizedMessage.toString(),
+                        Toast.LENGTH_LONG
                 ).show()
             } else {
                 if (snapshot != null) {
@@ -93,14 +97,15 @@ class AdminOnayUrun : AppCompatActivity() {
                             val addUrunOnay = document.get("addUrunOnay") as String
                             val addUrunMiktari = document.get("addUrunMiktari") as Number
                             val addUrun = document.get("addUrun") as String
-                            if(addUrunOnay=="HENÜZ İŞLEM YAPILMADI" && z==0){
+                            val addUrunTutari = document.get("addUrunTutari") as Number
+                            if (addUrunOnay == "HENÜZ İŞLEM YAPILMADI" && z == 0) {
                                 z++
-                                if(deger==false){
-                                    db.collection("KullaniciEklenenUrunler").document(document.id).update("addUrunOnay","URUN EKLEME REDDEDİLDİ")
-                                }else if(deger==true){
-                                    db.collection("KullaniciEklenenUrunler").document(document.id).update("addUrunOnay","URUN AKTARILDI")
+                                if (deger == false) { // red butonuna basılırsa ürün ekleme reddediliyor
+                                    db.collection("KullaniciUrunlerEklenen").document(document.id).update("addUrunOnay", "URUN EKLEME REDDEDİLDİ")
+                                } else if (deger == true) { // kabul butonuna basılırsa ürün ekleniyor
+                                    db.collection("KullaniciUrunlerEklenen").document(document.id).update("addUrunOnay", "URUN AKTARILDI")
                                     val userEmail = document.get("UserEmail") as String
-                                    urunEkle(userEmail,addUrun,addUrunMiktari)
+                                    urunEkle(userEmail, addUrun, addUrunMiktari, addUrunTutari)
                                 }
                                 break
                             }
@@ -112,25 +117,24 @@ class AdminOnayUrun : AppCompatActivity() {
     }
 
 
-    fun urunEkle(Email: String,Urun: String,UrunMiktari: Number){
-
+    fun urunEkle(Email: String, Urun: String, UrunMiktari: Number, UrunTutari: Number) {
+        //kabul butonuna basılırsa urunleri veritabanına ekliyoruz
         val postMapurunEkle = hashMapOf<String, Any>()
         postMapurunEkle.put("UserEmail", Email)
         postMapurunEkle.put("UrunMiktari", UrunMiktari)
-
+        postMapurunEkle.put("UrunTutari", UrunTutari)
         db.collection("KullaniciUrunleri").document("KullaniciUrunleriDoc").collection(Urun).add(postMapurunEkle).addOnCompleteListener { task ->
-
             if (task.isComplete && task.isSuccessful) {
-                finish()
             }
         }.addOnFailureListener { exception ->
             Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
         }
 
     }
+        //options ayarlarını yapıyoruz (admine göre) çünkü admin ve kullanici options u farklı
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
-        menuInflater.inflate(R.menu.options_menu,menu)
+        menuInflater.inflate(R.menu.options_menu_admin, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -138,9 +142,12 @@ class AdminOnayUrun : AppCompatActivity() {
 
         if (item.itemId == R.id.logout) {
             auth.signOut()
-            val intent = Intent(applicationContext,MainActivity::class.java)
+            val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
             finish()
+        } else if (item.itemId == R.id.bakiye_onay) {
+            val intent = Intent(applicationContext, adminOnayBakiye::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
