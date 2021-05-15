@@ -22,7 +22,6 @@ class kayitOl : AppCompatActivity() {
         val currentUser = auth.currentUser //Kullanici daha önce giriş yapan bir kullanıcı mı diye kontrol yapiliyor
         if (currentUser != null) {
             adminmisin()
-            finish()
         }
     }
 
@@ -33,7 +32,6 @@ class kayitOl : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, sifre).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 adminmisin()
-                finish()
                 //veritabanina bilgileri atiyoruz
                 val userid = auth.uid               //veritabanına aktarılacak veriler düzenleniyor ve kullanıcıdan alınıyor
                 val name = adText.text.toString()
@@ -46,6 +44,7 @@ class kayitOl : AppCompatActivity() {
                     kayitFireBaseAktarma(name, surname, kullaniciadi, sifre,
                             tckimlik, telefonno, email, adres, userid)
                 }
+
             }
         }.addOnFailureListener { exception ->
             if (exception != null) {
@@ -92,7 +91,7 @@ class kayitOl : AppCompatActivity() {
         db.collection("KullaniciTipi").add(postMapKullaniciTipi).addOnCompleteListener { task ->
 
             if (task.isComplete && task.isSuccessful) {
-                finish()
+
             }
         }.addOnFailureListener { exception ->
             Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
@@ -116,9 +115,11 @@ class kayitOl : AppCompatActivity() {
                                 if (admin == false) {
                                     val intent = Intent(applicationContext, AnaMenu::class.java)
                                     startActivity(intent)
+                                    finish()
                                 } else if (admin == true) {
                                     val intent = Intent(applicationContext, AdminOnayUrun::class.java)
                                     startActivity(intent)
+                                    finish()
                                 }
                             }
                         }
