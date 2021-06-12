@@ -3,7 +3,114 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent"
     tools:context=".raporla">
 
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/goodtimingbd"
+        android:text="YAZDIR"
+        android:textColor="@color/sari"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/urun_ekle_sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.803" />
+
+    <CalendarView
+        android:id="@+id/baslangicCalendarView"
+        android:layout_width="295dp"
+        android:layout_height="351dp"
+        android:background="@drawable/editarkaplantext"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.339" />
+
+    <TextView
+        android:id="@+id/baslangicTarihText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/baslangicTarihi"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baslangicCalendarView" />
+
+    <TextView
+        android:id="@+id/bitisTarihText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/baslangicTarihi"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baslangicTarihText" />
+
+    <Button
+        android:id="@+id/baslangicTarihi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="183dp"
+        android:layout_marginBottom="130dp"
+        android:background="@drawable/buttonarkaplan"
+        android:onClick="baslangicTarihiOnClick"
+        android:text="Başlangıç Tarihini Seç"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baslangicCalendarView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bitisTarihi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="135dp"
+        android:layout_marginTop="66dp"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/buttonarkaplan"
+        android:onClick="bitisTarihiOnClick"
+        android:text="Bitiş Tarihini Seç"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baslangicCalendarView"
+        app:layout_constraintVertical_bias="0.597" />
+
+    <Button
+        android:id="@+id/yazdirButon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="66dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/buttonarkaplan"
+        android:fontFamily="@font/goodtimingbd"
+        android:onClick="yazdirOnClick"
+        android:text="YAZDIR"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/baslangicCalendarView"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,14 @@
 package com.ans.borsa
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -15,6 +17,13 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.auth.User
 import kotlinx.android.synthetic.main.activity_ana_menu.*
 import kotlinx.android.synthetic.main.activity_emirler.*
+import kotlinx.android.synthetic.main.activity_raporla.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class emirler : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -28,7 +37,7 @@ class emirler : AppCompatActivity() {
     var UserEmailFromFB: ArrayList<String> = ArrayList()
     var emirler: emirlerRA? = null
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emirler)
@@ -46,7 +55,7 @@ class emirler : AppCompatActivity() {
         emirlerRV.adapter = emirler
         getDataFromFSEmirler()
     }
-
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getDataFromFSEmirler() { //satın al bilgileri rv ye çekiliyor
 
         db.collection("Emirler").addSnapshotListener { snapshot, exception ->
@@ -114,11 +123,14 @@ class emirler : AppCompatActivity() {
         } else if (item.itemId == R.id.bilgigiris) {
             val intent = Intent(applicationContext, com.ans.borsa.bilgiGiris::class.java)
             startActivity(intent)
+        }else if (item.itemId == R.id.raporla){
+            val intent = Intent(applicationContext,raporla::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
 
-
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getDFSatilanUrunler(urunKG: Number, urunTutari: Number, userEmail: String, urun: String) {
         var y = 0 //satın al bilgileri rv ye çekiliyor
         db.collection("KullaniciUrunleri").document("KullaniciUrunleriDoc")
@@ -152,7 +164,7 @@ class emirler : AppCompatActivity() {
             }
 
     }
-
+    @RequiresApi(Build.VERSION_CODES.O)
     fun emirIsle(
         secilenUrun: String,
         sUserEmail: String,
@@ -198,19 +210,20 @@ class emirler : AppCompatActivity() {
                 }
             }
     }
-
-
+    var suan = Timestamp.now().seconds
+    @RequiresApi(Build.VERSION_CODES.O)
     fun emiriKaydet(
         urunKGKayit: Number,
         urunTutarKayit: Number,
         urunKayit: String
     ) { // Emir verme işlemini yapan kod
+        var Tarih= LocalDate.parse(getDate(suan*1000,"yyyy-MM-dd"), DateTimeFormatter.ISO_DATE)
         val postMapKayitUrun = hashMapOf<String, Any>()
         postMapKayitUrun.put("urunKGKayit", urunKGKayit)
         postMapKayitUrun.put("urunTutarKayit", urunTutarKayit)
         postMapKayitUrun.put("urunKayit", urunKayit)
-        postMapKayitUrun.put("tarih", Timestamp.now()) //emir bilgileri veri tabanına aktarılıyor
-        db.collection("UrunKayitleri").document(auth.currentUser!!.email.toString())
+        postMapKayitUrun.put("tarih", convertToDateViaInstant(Tarih) ) //emir bilgileri veri tabanına aktarılıyor
+        db.collection("UrunKayitlari").document(auth.currentUser!!.email.toString())
             .collection("SatinAlinanUrunler").add(postMapKayitUrun).addOnCompleteListener { task ->
             if (task.isComplete && task.isSuccessful) {
             }
@@ -254,5 +267,23 @@ class emirler : AppCompatActivity() {
 
 
     }
+
+    fun getDate(second: Long, dateFormat: String): String
+    {
+
+        var formatter = SimpleDateFormat(dateFormat)
+        var calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(second)
+        return formatter.format(calendar.getTime())
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertToDateViaInstant(dateToConvert: LocalDate): Date {
+        return Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant())
+    }
+
 }
 

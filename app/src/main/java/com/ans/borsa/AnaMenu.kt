@@ -1,7 +1,7 @@
 package com.ans.borsa
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,12 +10,20 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_ana_menu.*
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class AnaMenu : AppCompatActivity() {
 
@@ -85,6 +93,9 @@ class AnaMenu : AppCompatActivity() {
             startActivity(intent)
         }else if (item.itemId == R.id.emirler) {
             val intent = Intent(applicationContext, emirler::class.java)
+            startActivity(intent)
+        }else if (item.itemId == R.id.raporla){
+            val intent = Intent(applicationContext, raporla::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
@@ -169,6 +180,7 @@ class AnaMenu : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun satinAlOnClick(view: View) { // satın al butonuna basılırsa eğer bakiyede para varsa satın alma işlemi yapılıyor
         y = 0
         t = 0
@@ -200,7 +212,7 @@ class AnaMenu : AppCompatActivity() {
                                                 .update("UrunMiktari", saticininKalanUrunu)
 
                                         bakiyeGuncelle(almakIstenenKG, urunTutariD, bakiyeKontrolEt)
-                                        satinAlKaydet(almakIstenenKG,urunTutariD,secilenUrun)
+                                        satinAlKaydet(almakIstenenKG, urunTutariD, secilenUrun)
 
                                         break
                                     } else if (almakIstenenKG > urunMiktariD && t == 0) {
@@ -291,10 +303,10 @@ class AnaMenu : AppCompatActivity() {
             }
         }
     }
-    fun emirVerOnClick(view:View){ // Emir verme işlemini yapan kod
+    fun emirVerOnClick(view: View){ // Emir verme işlemini yapan kod
         var almakIstenenKG = urun_tutari_text.text.toString().toDouble()
         var emirTutar = emir_tutari_text.text.toString().toDouble()
-        bakiyeGuncelle(almakIstenenKG,emirTutar,0)
+        bakiyeGuncelle(almakIstenenKG, emirTutar, 0)
         val postMapEmir = hashMapOf<String, Any>()
         postMapEmir.put("UserEmail", auth.currentUser!!.email.toString())
         postMapEmir.put("UrunKG", almakIstenenKG)
@@ -310,14 +322,16 @@ class AnaMenu : AppCompatActivity() {
         }
     }
 
-
-    fun satinAlKaydet(urunKGKayit :Number,urunTutarKayit: Number,urunKayit: String){ // Emir verme işlemini yapan kod
+    var suan = Timestamp.now().seconds
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun satinAlKaydet(urunKGKayit: Number, urunTutarKayit: Number, urunKayit: String){ // Emir verme işlemini yapan kod
+        var Tarih= LocalDate.parse(getDate(suan * 1000, "yyyy-MM-dd"), DateTimeFormatter.ISO_DATE)
         val postMapKayitUrun = hashMapOf<String, Any>()
         postMapKayitUrun.put("urunKGKayit", urunKGKayit)
         postMapKayitUrun.put("urunTutarKayit", urunTutarKayit)
         postMapKayitUrun.put("urunKayit", urunKayit)
-        postMapKayitUrun.put("tarih", Timestamp.now()) //emir bilgileri veri tabanına aktarılıyor
-        db.collection("UrunKayitleri").document(auth.currentUser!!.email.toString()).collection("SatinAlinanUrunler").add(postMapKayitUrun).addOnCompleteListener { task ->
+        postMapKayitUrun.put("tarih", convertToDateViaInstant(Tarih)) //emir bilgileri veri tabanına aktarılıyor
+        db.collection("UrunKayitlari").document(auth.currentUser!!.email.toString()).collection("SatinAlinanUrunler").add(postMapKayitUrun).addOnCompleteListener { task ->
 
             if (task.isComplete && task.isSuccessful) {
             }
@@ -326,6 +340,21 @@ class AnaMenu : AppCompatActivity() {
         }
     }
 
+    fun getDate(second: Long, dateFormat: String): String
+    {
+
+        var formatter = SimpleDateFormat(dateFormat)
+        var calendar = Calendar.getInstance()
+        calendar.setTimeInMillis(second)
+        return formatter.format(calendar.getTime())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertToDateViaInstant(dateToConvert: LocalDate): Date {
+        return Date.from(dateToConvert.atStartOfDay()
+                .atZone(ZoneId.systemDefault())
+                .toInstant())
+    }
 
 
     }

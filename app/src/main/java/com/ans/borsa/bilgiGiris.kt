@@ -160,6 +160,9 @@ class bilgiGiris : AppCompatActivity() {
         }else if (item.itemId == R.id.emirler) {
             val intent = Intent(applicationContext, emirler::class.java)
             startActivity(intent)
+        }else if (item.itemId == R.id.raporla){
+            val intent = Intent(applicationContext,raporla::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }

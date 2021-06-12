@@ -3,5 +3,6 @@
     <item android:id="@+id/anasayfa" android:title="Ürün Satın Al"></item>
     <item android:id="@+id/bilgigiris" android:title="Bilgi Giriş"></item>
     <item android:id="@+id/emirler" android:title="Emirlerim"></item>
+    <item android:id="@+id/raporla" android:title="Yazdır"></item>
     <item android:id="@+id/logout" android:title="Çıkış Yap"></item>
 </menu>
