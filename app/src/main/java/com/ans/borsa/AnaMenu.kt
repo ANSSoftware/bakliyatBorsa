@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -81,6 +82,9 @@ class AnaMenu : AppCompatActivity() {
             finish()
         } else if (item.itemId == R.id.bilgigiris) {
             val intent = Intent(applicationContext, bilgiGiris::class.java)
+            startActivity(intent)
+        }else if (item.itemId == R.id.emirler) {
+            val intent = Intent(applicationContext, emirler::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
@@ -196,6 +200,7 @@ class AnaMenu : AppCompatActivity() {
                                                 .update("UrunMiktari", saticininKalanUrunu)
 
                                         bakiyeGuncelle(almakIstenenKG, urunTutariD, bakiyeKontrolEt)
+                                        satinAlKaydet(almakIstenenKG,urunTutariD,secilenUrun)
 
                                         break
                                     } else if (almakIstenenKG > urunMiktariD && t == 0) {
@@ -227,7 +232,7 @@ class AnaMenu : AppCompatActivity() {
 
     }
 
-    fun bakiyeGuncelle(almakIstenenKG: Double, urunTutariD: Double, bakiyeKontrol: Int) { // satın alma işleminden sonra bakiye güncelleniyor
+      fun bakiyeGuncelle(almakIstenenKG: Double, urunTutariD: Double, bakiyeKontrol: Int) { // satın alma işleminden sonra bakiye güncelleniyor
         x = 0
         db.collection("Bakiyeler").addSnapshotListener { snapshot, exception ->
             if (exception != null) {
@@ -286,7 +291,45 @@ class AnaMenu : AppCompatActivity() {
             }
         }
     }
-}
+    fun emirVerOnClick(view:View){ // Emir verme işlemini yapan kod
+        var almakIstenenKG = urun_tutari_text.text.toString().toDouble()
+        var emirTutar = emir_tutari_text.text.toString().toDouble()
+        bakiyeGuncelle(almakIstenenKG,emirTutar,0)
+        val postMapEmir = hashMapOf<String, Any>()
+        postMapEmir.put("UserEmail", auth.currentUser!!.email.toString())
+        postMapEmir.put("UrunKG", almakIstenenKG)
+        postMapEmir.put("EmirOnay", false)
+        postMapEmir.put("Urun", secilenUrun)
+        postMapEmir.put("EmirTutar", emirTutar) //emir bilgileri veri tabanına aktarılıyor
+        db.collection("Emirler").add(postMapEmir).addOnCompleteListener { task ->
+
+            if (task.isComplete && task.isSuccessful) {
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+    fun satinAlKaydet(urunKGKayit :Number,urunTutarKayit: Number,urunKayit: String){ // Emir verme işlemini yapan kod
+        val postMapKayitUrun = hashMapOf<String, Any>()
+        postMapKayitUrun.put("urunKGKayit", urunKGKayit)
+        postMapKayitUrun.put("urunTutarKayit", urunTutarKayit)
+        postMapKayitUrun.put("urunKayit", urunKayit)
+        postMapKayitUrun.put("tarih", Timestamp.now()) //emir bilgileri veri tabanına aktarılıyor
+        db.collection("UrunKayitleri").document(auth.currentUser!!.email.toString()).collection("SatinAlinanUrunler").add(postMapKayitUrun).addOnCompleteListener { task ->
+
+            if (task.isComplete && task.isSuccessful) {
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
+        }
+    }
+
+
+
+    }
+
 
 
 

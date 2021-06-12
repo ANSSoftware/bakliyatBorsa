@@ -157,6 +157,9 @@ class bilgiGiris : AppCompatActivity() {
         } else if (item.itemId == R.id.anasayfa) {
             val intent = Intent(applicationContext, AnaMenu::class.java)
             startActivity(intent)
+        }else if (item.itemId == R.id.emirler) {
+            val intent = Intent(applicationContext, emirler::class.java)
+            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
