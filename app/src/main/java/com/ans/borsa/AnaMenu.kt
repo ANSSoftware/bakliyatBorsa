@@ -260,17 +260,17 @@ class AnaMenu : AppCompatActivity() {
                             var bakiyeBilgisiSondurum = 0.0
                             if (userEmail == auth.currentUser!!.email.toString() && x == 0 && bakiyeKontrol == 0) {
                                 x++
-                                bakiyeBilgisiSondurum = userBakiyeD - (almakIstenenKG * urunTutariD)
+                                bakiyeBilgisiSondurum = userBakiyeD - (((almakIstenenKG * urunTutariD)*101)/100)
                                 db.collection("Bakiyeler").document(document.id)
                                         .update("bakiye", bakiyeBilgisiSondurum)
-                                bakiyeText.text = "BAKİYENİZ: " + bakiyeBilgisiSondurum + "TL"
+                                bakiyeText.text = "BAKİYENİZ: " + bakiyeTextYap(userBakiye) + "TL"
                                 break
                             } else if (userEmail == auth.currentUser!!.email.toString() && x == 0 && bakiyeKontrol == 1) {
                                 x++
                                 bakiyeBilgisiSondurum = userBakiyeD - (almakIstenenKG + urunTutariD)
                                 db.collection("Bakiyeler").document(document.id)
                                         .update("bakiye", bakiyeBilgisiSondurum)
-                                bakiyeText.text = "BAKİYENİZ: " + bakiyeBilgisiSondurum + "TL"
+                                bakiyeText.text = "BAKİYENİZ: " + bakiyeTextYap(userBakiye) + "TL"
                                 break
                             }
                         }
@@ -292,22 +292,11 @@ class AnaMenu : AppCompatActivity() {
                         for (document in documents) {
                             val userBakiye = document.get("bakiye") as Number
                             val userEmail = document.get("Email") as String
-                            var bakiyeBilgisi = 0.0
-                            var bakiyeBilgisiString =""
-                            var bakiyeUzunluk = 0
-                            var bakiyeIntS = ""
+
+
                             if (userEmail == auth.currentUser!!.email.toString()) {
-                                bakiyeBilgisi = userBakiye.toDouble()
-                                bakiyeBilgisiString=bakiyeBilgisi.toString()
-                                bakiyeUzunluk=bakiyeBilgisiString.length
-                                for(c in 0..bakiyeUzunluk){
-                                    if(bakiyeBilgisiString[c]!='.'){
-                                        bakiyeIntS+=bakiyeBilgisiString[c]
-                                    }else if(bakiyeBilgisiString[c]=='.'){
-                                        break
-                                    }
-                                }
-                                bakiyeText.text = "BAKİYENİZ: " + bakiyeIntS + "TL"
+
+                                bakiyeText.text = "BAKİYENİZ: " + bakiyeTextYap(userBakiye) + "TL"
 
                             }
                         }
@@ -369,6 +358,31 @@ class AnaMenu : AppCompatActivity() {
                 .toInstant())
     }
 
+    fun bakiyeTextYap(userBakiye: Number): String{
+        var f=0
+        var bakiyeIntS = ""
+        var bakiyeBilgisi = 0.0
+        var bakiyeBilgisiString =""
+        var bakiyeUzunluk = 0
+        bakiyeBilgisi = userBakiye.toDouble()
+        bakiyeBilgisiString=bakiyeBilgisi.toString()
+        bakiyeUzunluk=bakiyeBilgisiString.length
+        for(c in 0..bakiyeUzunluk){
+            if(bakiyeBilgisiString[c]!='.' && f==0){
+                bakiyeIntS+=bakiyeBilgisiString[c]
+            }else if(bakiyeBilgisiString[c]=='.'){
+                bakiyeIntS+=bakiyeBilgisiString[c]
+                f++
+            }else if(f==1){
+                bakiyeIntS+=bakiyeBilgisiString[c]
+                f++
+            }else if(f==2){
+                bakiyeIntS+=bakiyeBilgisiString[c]
+                break
+            }
+        }
+        return bakiyeIntS
+    }
 
     }
 
