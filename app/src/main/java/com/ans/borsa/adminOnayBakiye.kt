@@ -3,6 +3,7 @@ package com.ans.borsa
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -12,6 +13,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_admin_onay_bakiye.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import java.net.URL
 
 class adminOnayBakiye : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
@@ -20,21 +24,25 @@ class adminOnayBakiye : AppCompatActivity() {
     var addbakiyeOnayFromFB: ArrayList<String> = ArrayList()
     var UserEmailFromBFB: ArrayList<String> = ArrayList()
     var adapterbakiye: adminBakiyeOnayRA? = null
+    var paralar = arrayListOf("TRY","USD","EUR","GBP")
+    var paraDegeri = arrayListOf<Double>()
     var i = 0
     var x = 0
+    var paraTutari= 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin_onay_bakiye)
         auth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
-
+        paraBirimi()
         // recycle ayarlari
         getDataFromFSBakiye()
         var layoutManagerBakiye = LinearLayoutManager(this)
         bakiyeRV.layoutManager = layoutManagerBakiye
         adapterbakiye = adminBakiyeOnayRA(addbakiyeFromFB, addbakiyeOnayFromFB, UserEmailFromBFB)
         bakiyeRV.adapter = adapterbakiye
+
     }
 
     fun getDataFromFSBakiye() { // eklenen bakiye bilgilerini veritabanından çekiyoruz
@@ -52,7 +60,8 @@ class adminOnayBakiye : AppCompatActivity() {
                             val addBakiye = document.get("addBakiye") as Number
                             val addBakiyeOnay = document.get("addBakiyeOnay") as String
                             val userEmail = document.get("UserEmail") as String
-                            val addBakiyeText = addBakiye.toString() + "TL"
+                            val addParaBirimi = document.get("addParaBirimi") as String
+                            val addBakiyeText = addBakiye.toString()+addParaBirimi
                             if (addBakiyeOnay == "HENÜZ İŞLEM YAPILMADI") {
                                 UserEmailFromBFB.add(userEmail)
                                 addbakiyeOnayFromFB.add(addBakiyeOnay)
@@ -90,14 +99,22 @@ class adminOnayBakiye : AppCompatActivity() {
                         for (document in documents) {
                             val addBakiyeOnay = document.get("addBakiyeOnay") as String
                             val addBakiye = document.get("addBakiye") as Number
+                            val addParaBirimi = document.get("addParaBirimi") as String
+                            val userEmail = document.get("UserEmail") as String
                             if (addBakiyeOnay == "HENÜZ İŞLEM YAPILMADI" && i == 0) {
                                 i++
                                 if (deger == false) {
                                     db.collection("KullaniciBakiyeEklenen").document(document.id).update("addBakiyeOnay", "PARA AKTARIMI REDDEDİLDİ")
                                 } else if (deger == true) {
                                     db.collection("KullaniciBakiyeEklenen").document(document.id).update("addBakiyeOnay", "PARA BAKİYEYE AKTARILDI")
-                                    val userEmail = document.get("UserEmail") as String
-                                    bakiyeGuncelle(userEmail, addBakiye)
+
+                                    for (a in 0..3){
+                                        if(paralar[a]==addParaBirimi){
+                                           paraTutari=paraDegeri[a]
+                                        }
+
+                                    }
+                                    bakiyeGuncelle(userEmail,addBakiye,paraTutari)
                                 }
                                 break
                             }
@@ -108,7 +125,7 @@ class adminOnayBakiye : AppCompatActivity() {
         }
     }
 
-    fun bakiyeGuncelle(userEmail: String, addBakiye: Number) { // eğer kabul butonuna basılırsa bakiye güncelleniyor
+    fun bakiyeGuncelle(userEmail: String, addBakiye: Number,paraTutari: Double) { // eğer kabul butonuna basılırsa bakiye güncelleniyor
         x = 0
         db.collection("Bakiyeler").addSnapshotListener { snapshot, exception ->
             if (exception != null) {
@@ -123,13 +140,13 @@ class adminOnayBakiye : AppCompatActivity() {
                         val documents = snapshot.documents
                         for (document in documents) {
                             val bakiye = document.get("bakiye") as Number
-                            val kontrolEmail = document.get("UserEmail") as String
+                            val kontrolEmail = document.get("Email") as String
                             var bakiyeYazdir: Number
                             var geciciBakiye = bakiye.toDouble()
-                            var geciciAddBakiye = addBakiye.toDouble()
+                            var geciciaddBakiye = (addBakiye.toDouble())*paraTutari
                             if (userEmail == kontrolEmail && x == 0) {
                                 x++
-                                bakiyeYazdir = geciciBakiye + geciciAddBakiye
+                                bakiyeYazdir = geciciBakiye + geciciaddBakiye
                                 db.collection("Bakiyeler").document(document.id).update("bakiye", bakiyeYazdir)
                                 break
                             }
@@ -160,5 +177,25 @@ class adminOnayBakiye : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+
+     fun paraBirimi() {
+         var url = "https://api.genelpara.com/embed/doviz.json"
+
+         doAsync{
+             calistir(url)
+            uiThread {}
+         }
+     }
+    fun calistir(url:String){
+        var json = URL(url).readText()
+        Log.d(javaClass.simpleName,json)
+        paraDegeri.add(1.0)
+        paraDegeri.add((json.substring(17,23)).toDouble())
+        paraDegeri.add((json.substring(76,83)).toDouble())
+        paraDegeri.add((json.substring(137,144)).toDouble())
+    }
+
+
 }
 

@@ -293,9 +293,22 @@ class AnaMenu : AppCompatActivity() {
                             val userBakiye = document.get("bakiye") as Number
                             val userEmail = document.get("Email") as String
                             var bakiyeBilgisi = 0.0
+                            var bakiyeBilgisiString =""
+                            var bakiyeUzunluk = 0
+                            var bakiyeIntS = ""
                             if (userEmail == auth.currentUser!!.email.toString()) {
                                 bakiyeBilgisi = userBakiye.toDouble()
-                                bakiyeText.text = "BAKİYENİZ: " + bakiyeBilgisi + "TL"
+                                bakiyeBilgisiString=bakiyeBilgisi.toString()
+                                bakiyeUzunluk=bakiyeBilgisiString.length
+                                for(c in 0..bakiyeUzunluk){
+                                    if(bakiyeBilgisiString[c]!='.'){
+                                        bakiyeIntS+=bakiyeBilgisiString[c]
+                                    }else if(bakiyeBilgisiString[c]=='.'){
+                                        break
+                                    }
+                                }
+                                bakiyeText.text = "BAKİYENİZ: " + bakiyeIntS + "TL"
+
                             }
                         }
                     }

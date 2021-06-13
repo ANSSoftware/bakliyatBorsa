@@ -1,7 +1,6 @@
 package com.ans.borsa
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -11,20 +10,37 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.toolbox.StringRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_bilgi_giris.*
+import java.io.*
 import java.util.*
+import com.android.volley.Response
+import com.android.volley.toolbox.Volley
+import com.beust.klaxon.Klaxon
+import com.squareup.okhttp.Request
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.toast
+import org.jetbrains.anko.uiThread
+import org.json.JSONArray
+import org.json.JSONException
+import java.net.URL
+import java.nio.charset.Charset
 
 class bilgiGiris : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-
     lateinit var urun_ekle_sp: Spinner
+    lateinit var paraBirimiSpinner: Spinner
+
     var urunler = arrayListOf("LÜTFEN BİR ÜRÜN SEÇİNİZ")
+    var paralar = arrayListOf("TRY","USD","EUR","GBP")
     var secilenUrun = ""
+    var secilenPara = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bilgi_giris)
@@ -33,6 +49,7 @@ class bilgiGiris : AppCompatActivity() {
 
         urunListCekFB()
         urun_ekle_spfun()
+        para_spfun()
 
     }
 
@@ -62,6 +79,34 @@ class bilgiGiris : AppCompatActivity() {
             }
         }
     }
+
+    fun para_spfun() {
+        paraBirimiSpinner = findViewById(R.id.paraBirimiSpinner) as Spinner
+        paraBirimiSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, paralar)
+        paraBirimiSpinner.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+                AdapterView.OnItemSelectedListener {
+            override fun onItemClick(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+            ) {
+            }
+
+            override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+            ) {
+                secilenPara = paralar[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+    }
+
 
     fun urunListCekFB() {
         db.collection("Urunler").orderBy("Urun", Query.Direction.DESCENDING).addSnapshotListener { snapshot, exception ->
@@ -127,6 +172,7 @@ class bilgiGiris : AppCompatActivity() {
                 postMap.put("addBakiye", addBakiye)
                 postMap.put("addBakiyeOnay", "HENÜZ İŞLEM YAPILMADI")
                 postMap.put("addBakiyeID", "$uuid")
+                postMap.put("addParaBirimi", secilenPara)
                 db.collection("KullaniciBakiyeEklenen").add(postMap).addOnCompleteListener { task ->
                 }.addOnFailureListener { exception ->
                     Toast.makeText(applicationContext, exception.localizedMessage.toString(), Toast.LENGTH_LONG).show()
@@ -161,11 +207,15 @@ class bilgiGiris : AppCompatActivity() {
             val intent = Intent(applicationContext, emirler::class.java)
             startActivity(intent)
         }else if (item.itemId == R.id.raporla){
-            val intent = Intent(applicationContext,raporla::class.java)
+            val intent = Intent(applicationContext, raporla::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
+
+
+
+
 
 
 }

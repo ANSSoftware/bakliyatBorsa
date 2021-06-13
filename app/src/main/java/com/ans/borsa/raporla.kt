@@ -14,6 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_raporla.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -23,6 +26,7 @@ class raporla : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     var x=0
+    var dosyaIcerigi = "\"Tarih\",\"Urun Tipi\",\"Alim Tutari\",\"Miktar\"\n"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_raporla)
@@ -120,6 +124,7 @@ class raporla : AppCompatActivity() {
             Toast.makeText(applicationContext, "LÜTFEN BİTİŞ TARİHİNİ BAŞLANGIÇ TARİHİNDEN ERKEN BİR TARİH SEÇİNİZ!!!", Toast.LENGTH_SHORT).show()
         }else{
             yazdirVeriGetir()
+            Toast.makeText(applicationContext, "YAZDIRMA GERÇEKLEŞTİ", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -147,7 +152,7 @@ class raporla : AppCompatActivity() {
                                     var urunTutarKayit = document.get("urunTutarKayit") as Number
                                     var  Tarih= LocalDate.parse(timestampToDate(tarih), DateTimeFormatter.ISO_DATE)
                                     if(baslangicTarihi<=Tarih && bitisTarihi>=Tarih){
-
+                                        yazdir(Tarih,urunKayit,urunTutarKayit,urunKGKayit)
                                     }
                                 }
                             }
@@ -164,5 +169,30 @@ class raporla : AppCompatActivity() {
         return date
     }
 
+    fun yazdir(Tarih: LocalDate,urunKayit: String,urunTutarKayit: Number,urunKGKayit: Number){
+        var dosyaDir = File(getExternalFilesDir(null),"Satin_Alinanlar")
+        dosyaDir.mkdirs()
+        var dosya= File(dosyaDir,"Satin_Alinanlar.csv")
+        var tarihS = Tarih.toString()
+        var urunTutarS = urunTutarKayit.toString()
+        var urunMiktarS = urunKGKayit.toString()
+        dosyaIcerigi+="\"$tarihS\",\"$urunKayit\",\"$urunTutarS\",\"$urunMiktarS\"\n"
 
+        FileOutputStream(dosya).use{
+            it.write(dosyaIcerigi.encodeToByteArray())
+        }
+    }
+
+    fun oku() :String{
+        var dosyaIcerigi = ""
+        var dosyaDir = File(getExternalFilesDir(null),"AltKalsor")
+        dosyaDir.mkdirs()
+
+        var dosya= File(dosyaDir,"DosyaAdi.csv")
+
+        dosyaIcerigi = FileInputStream(dosya).bufferedReader().use {
+            it.readLine()
+        }
+        return  dosyaIcerigi
+    }
 }
